@@ -26,7 +26,7 @@ def generate_fake_table_map(total_tables=TOTAL_TABLES,
             'id': str(table_id),
             'size': random.choice(range(*size_range, 2)),
             'vip': random.random() < vip_chance,
-            'status': 'free' if random.random() < free_table_chance else random.choice(possible_non_free_status)
+            'status': 'free' if random.random() < free_table_chance else random.choice(possible_non_free_status),
         }
         for table_id in range(1, total_tables+1)
     ]
