@@ -6,6 +6,7 @@ from utils.create_fake_table_map import generate_fake_table_map
 
 
 table_map = generate_fake_table_map()
+table_status_change = []
 
 ##################################################################
 # query ##########################################################
@@ -39,6 +40,7 @@ def resolve_reserve_table(*_, id):
     table = next((table for table in table_map if table['id'] == id), None)
     if table and table['status'] == 'free':
         table['status'] = 'reserved'
+        table_status_change.append({'id': table['id'], 'oldStatus': 'free', 'newStatus': 'reserved'})
         return True
     return False
 
@@ -47,6 +49,10 @@ def resolve_reserve_table(*_, id):
 def resolve_change_table_status(*_, id, status):
     table = next((table for table in table_map if table['id'] == id), None)
     if table:
+        if table['status'] == status:
+            return False
+
+        table_status_change.append({'id': table['id'], 'oldStatus': table['status'], 'newStatus': status})
         table['status'] = status
         return True
     return False
@@ -65,6 +71,7 @@ def resolve_monitor_table_status(monitorTableStatus, *_,):
 @subscription.source('monitorTableStatus')
 async def notify_table_status_change(*_):
     while True:
-        # yield table_map
-        yield True
+        if len(table_status_change) > 0:
+            yield table_status_change
+            table_status_change.clear()
         await asyncio.sleep(1)

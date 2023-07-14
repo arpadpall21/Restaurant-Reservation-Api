@@ -13,8 +13,7 @@ type_defs = gql("""
     }
 
     type Subscription {
-        # monitorTableStatus: [Table]!
-        monitorTableStatus: Boolean!
+        monitorTableStatus: [TableStatusChange]!
     }
 
     type Table {
@@ -22,6 +21,12 @@ type_defs = gql("""
         size: Int!
         vip: Boolean!
         status: Status!
+    }
+
+    type TableStatusChange {
+        id: ID!
+        oldStatus: Status!
+        newStatus: Status!
     }
 
     enum Status {

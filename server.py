@@ -7,7 +7,7 @@ from handlers.query import query, mutation, subscription
 
 
 schema = make_executable_schema(type_defs, query, mutation, subscription)
-app = GraphQL(schema, debug=True)                       # change debug aftet DEV
+app = GraphQL(schema)
 
 
 if __name__ == '__main__':
@@ -16,6 +16,3 @@ if __name__ == '__main__':
 
     server = Server(config)
     server.run()
-
-
-# nail test concepts!!!!!!!

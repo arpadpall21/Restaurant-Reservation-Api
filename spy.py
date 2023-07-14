@@ -6,7 +6,11 @@ UPTIME = 7 * 24 * 60 * 60       # 7 days
 
 query = """
     subscription GetTableStatusChange{
-        monitorTableStatus
+        monitorTableStatus {
+            id
+            oldStatus
+            newStatus
+        }
     }
 """
 
@@ -17,10 +21,12 @@ def callback(_, data):
         return
 
     payload = data['payload']['data']['monitorTableStatus']
-    print(f': {payload}')
+    print(f'Tables with changed status: {payload}')
 
 
 with GraphQLClient('ws://localhost:3000/graphql') as client:
-    client.subscribe(query, callback=callback)
-    print('websocket client connected!')
+    sub_id = client.subscribe(query, callback=callback)
+    print('spy connected!')
+
     sleep(UPTIME)
+    client.stop_subscribe(sub_id)
