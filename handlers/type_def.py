@@ -19,7 +19,6 @@ type_defs = gql("""
     type Table {
         id: ID!
         size: Int!
-        vip: Boolean!
         status: Status!
     }
 
